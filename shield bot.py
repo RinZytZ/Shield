@@ -454,7 +454,12 @@ class MTFShield:
         print("\n✅ Бот готов к работе")
         print("💡 Используйте /help в ЛС для списка команд\n")
         
-        self.bot.infinity_polling()
+        print("🚀 Запуск polling...")
+try:
+    self.bot.infinity_polling(timeout=30, long_polling_timeout=30)
+except Exception as e:
+    print(f"❌ Ошибка polling: {e}")
+    logger.critical(f"Polling error: {e}")
 
 
 # ==================== ЗАПУСК ====================
