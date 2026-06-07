@@ -437,30 +437,34 @@ class MTFShield:
             else:
                 self.bot.reply_to(m, "❌ Неизвестная команда. Используйте: add, remove, list")
     
-    def run(self):
-        """Запуск бота"""
-        logger.info("MTF SHIELD ЗАПУЩЕН")
-        
-        print("\n" + "=" * 50)
-        print("🛡️ MTF SHIELD - Мобильная Оперативная Группа")
-        print("=" * 50)
-        print(f"📱 Бот: @{self.bot.get_me().username}")
-        print(f"🛡️ Защищаемая группа: {PROTECTED_MAIN_GROUP}")
-        print(f"📝 Логи канал: {LOGS_CHANNEL}")
-        print(f"🚨 Алерты канал: {ALERTS_CHANNEL}")
-        print(f"🎯 Цель наблюдения: {self.target_username}")
-        print(f"🔰 Режим защиты: {'ВКЛ' if self.shield_active else 'ВЫКЛ'}")
-        print(f"📋 Динамических групп: {len(self.watched_groups)}")
-        print("\n✅ Бот готов к работе")
-        print("💡 Используйте /help в ЛС для списка команд\n")
-        
-        print("🚀 Запуск polling...")
-try:
-    self.bot.infinity_polling(timeout=30, long_polling_timeout=30)
-except Exception as e:
-    print(f"❌ Ошибка polling: {e}")
-    logger.critical(f"Polling error: {e}")
-
+def run(self):
+    """Запуск бота"""
+    logger.info("MTF SHIELD ЗАПУЩЕН")
+    
+    print("\n" + "=" * 50)
+    print("🛡️ MTF SHIELD - Мобильная Оперативная Группа")
+    print("=" * 50)
+    print(f"📱 Бот: @{self.bot.get_me().username}")
+    print(f"🛡️ Защищаемая группа: {PROTECTED_MAIN_GROUP}")
+    print(f"📝 Логи канал: {LOGS_CHANNEL}")
+    print(f"🚨 Алерты канал: {ALERTS_CHANNEL}")
+    print(f"🎯 Цель наблюдения: {self.target_username}")
+    print(f"🔰 Режим защиты: {'ВКЛ' if self.shield_active else 'ВЫКЛ'}")
+    print(f"📋 Динамических групп: {len(self.watched_groups)}")
+    print("\n✅ Бот готов к работе")
+    print("💡 Используйте /help в ЛС для списка команд\n")
+    
+    # Удаляем webhook перед запуском polling
+    print("🚀 Удаление webhook...")
+    self.bot.remove_webhook()
+    print("✅ Webhook удалён")
+    
+    print("🚀 Запуск polling...")
+    try:
+        self.bot.infinity_polling(timeout=60, long_polling_timeout=60, skip_pending=True)
+    except Exception as e:
+        print(f"❌ Ошибка polling: {e}")
+        logger.critical(f"Polling error: {e}")
 
 # ==================== ЗАПУСК ====================
 if __name__ == "__main__":
